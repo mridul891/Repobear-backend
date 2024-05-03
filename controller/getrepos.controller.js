@@ -4,7 +4,7 @@ dotenv.config({
 })
 const getrepo = async (req, res) => {
 
-    const api_key = process.env.ACCESS_TOKEN
+    const api_key = await req.query.code;
     const options = {
         method: ["GET"],
         headers: {
