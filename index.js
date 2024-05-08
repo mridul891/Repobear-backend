@@ -5,6 +5,9 @@ const cors = require('cors');
 const { getrepo } = require('./controller/getrepos.controller');
 const { login } = require('./controller/login.controller');
 const { callback } = require('./controller/callback.controller');
+const { userdetails } = require('./controller/getuserdetails.controller');
+const { accessMiddleware } = require('./middleware/accesstoken.middleware');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -20,7 +23,8 @@ app.get('/login', login);
 // Callback URL for GitHub to redirect users back to
 app.get('/callback', callback);
 
-app.get('/get-repo', getrepo)
+app.get('/get-user',accessMiddleware, userdetails);
+app.get('/get-repo',accessMiddleware, getrepo)
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

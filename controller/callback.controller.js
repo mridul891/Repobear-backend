@@ -7,14 +7,15 @@ dotenv.config({
 
 const callback = async (req, res) => {
     const params = "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&code=" + req.query.code;
-    console.log(params)
     const options = {
         method: "POST",
         headers: {
             "Accept": "application/json"
         }
     }
-    const alpha = await fetch("https://github.com/login/oauth/access_token" + params, options).then((response) => { return response.json() }).then((data) => res.json(data))
+    await fetch("https://github.com/login/oauth/access_token" + params, options)
+        .then((response) => response.json())
+        .then((data) => res.json(data))
 }
 
 module.exports = {
