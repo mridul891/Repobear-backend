@@ -1,6 +1,7 @@
 const dotenv = require("dotenv")
 const { response } = require("express")
 const { User } = require('../models/UserSchema')
+const axios = require("axios")
 dotenv.config({
     path: ".env"
 })
@@ -9,15 +10,14 @@ dotenv.config({
 const userdetails = async (req, res) => {
     const token = req.token;
     const options = {
-        method: "GET",
         headers: {
             "Accept": "application/json",
             "Authorization": `Bearer ${token}`
         }
     }
 
-    await fetch("https://api.github.com/user", options)
-        .then(response => response.json())
+    axios.get("https://api.github.com/user", options)
+        .then(response => res.send(response.data))
         .then(async (data) => {
             const existinguser = await User.findOneAndUpdate({
                 GithubHandle: data.login,

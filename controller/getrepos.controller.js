@@ -15,10 +15,6 @@ const getrepo = async (req, res) => {
         },
     }
     try {
-        // const user = await User.findOne({
-        //     AccessToken : token
-        // })
-        // console.log(user)
         await fetch(`https://api.github.com/search/repositories?q=user:${req.query.username}`, options)
             .then(response => response.json())
             .then(data => res.send(data))
