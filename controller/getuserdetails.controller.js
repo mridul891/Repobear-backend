@@ -5,10 +5,8 @@ const axios = require("axios")
 dotenv.config({
     path: ".env"
 })
-
-
 const userdetails = async (req, res) => {
-    const token = req.token;
+    const token = req.query.token;
     const options = {
         headers: {
             "Accept": "application/json",
@@ -16,22 +14,9 @@ const userdetails = async (req, res) => {
         }
     }
 
-    axios.get("https://api.github.com/user", options)
-        .then(response => res.send(response.data))
-        .then(async (data) => {
-            const existinguser = await User.findOneAndUpdate({
-                GithubHandle: data.login,
-            }, { AccessToken: token }, { new: true })
-            if (existinguser) {
-                return res.send(data)
-            }
-            const user = await User.create({
-                GithubHandle: data.login,
-                AccessToken: token
-            })
-            res.send(data)
-        }
-        );
+    await fetch('https://api.github.com/user', options)
+        .then(response => response.json())
+        .then(data => res.send(data))
 }
 
 module.exports = { userdetails }

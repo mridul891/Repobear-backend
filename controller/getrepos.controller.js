@@ -1,25 +1,16 @@
-const dotenv = require('dotenv');
-const { User } = require('../models/UserSchema');
-const { response } = require('express');
-dotenv.config({
-    path: ".env"
-})
+const { response } = require("express");
+
 const getrepo = async (req, res) => {
-
-    const token = req.token;
-
+    const token = req.query.token;
     const options = {
-        method: "GET",
         headers: {
-            "Authorization": `Bearer ${token}`,
-        },
+            "Accept": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
     }
-    try {
-        await fetch(`https://api.github.com/search/repositories?q=user:${req.query.username}`, options)
-            .then(response => response.json())
-            .then(data => res.send(data))
-    } catch (error) {
-        console.log(error)
-    }
+    await fetch('https://api.github.com/user/repos', options)
+        .then(response => response.json())
+        .then(data => res.send(data))
 }
+
 module.exports = { getrepo }
